@@ -32,10 +32,16 @@
         </v-row>
         <v-row justify="center">
           <v-col class="d-none d-sm-flex" sm="4">
-            <v-btn color="primary" small outlined>Advanced Filters ></v-btn>
+            <v-btn color="primary" small outlined>
+              Advanced Filters
+              <v-icon>mdi-chevron-right</v-icon>
+            </v-btn>
           </v-col>
           <v-col class="d-flex d-sm-none">
-            <v-btn color="primary" block small outlined>Advanced Filters ></v-btn>
+            <v-btn color="primary" block small outlined>
+              Advanced Filters
+              <v-icon>mdi-chevron-right</v-icon>
+            </v-btn>
           </v-col>
         </v-row>
       </v-card>

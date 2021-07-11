@@ -1,7 +1,7 @@
 import { GetterTree } from 'vuex'
 import { Car } from '~/interfaces/Car'
 
-export const state = () => ({
+export const state = (): {cars: Car[]} => ({
   cars: [
     {
       fuelType: ['PETROL'],
@@ -15,7 +15,7 @@ export const state = () => ({
       steeringPosition: 'RIGHT',
       transmission: 'AUTO',
       color: 'RED',
-      door: 5,
+      door: 4,
       bodyType: 'STATION_WAGON',
       price: 2500,
       assets: [
@@ -50,7 +50,7 @@ export const state = () => ({
       steeringPosition: 'RIGHT',
       transmission: 'AUTO',
       color: 'WHITE',
-      door: 5,
+      door: 4,
       bodyType: 'STATION_WAGON',
       price: 5000,
       assets: [
@@ -85,7 +85,7 @@ export const state = () => ({
       steeringPosition: 'RIGHT',
       transmission: 'AUTO',
       color: 'GREY',
-      door: 5,
+      door: 4,
       bodyType: 'STATION_WAGON',
       price: 6600,
       assets: [
@@ -120,7 +120,7 @@ export const state = () => ({
       steeringPosition: 'RIGHT',
       transmission: 'AUTO',
       color: 'BLACK',
-      door: 5,
+      door: 4,
       bodyType: 'HATCHBACK',
       price: 1400,
       assets: [
@@ -146,7 +146,7 @@ export const state = () => ({
       createdAt: '2021-07-04T17:06:12.680Z',
       updatedAt: '2021-07-04T17:06:12.680Z',
     },
-  ] as Car[],
+  ],
 })
 
 export type RootState = ReturnType<typeof state>
