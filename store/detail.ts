@@ -1,4 +1,4 @@
-import { GetterTree, MutationTree } from 'vuex'
+import { GetterTree, MutationTree, ActionTree } from 'vuex'
 import { Car } from '~/interfaces/Car'
 
 export const state = (): { car: Car } => ({
@@ -17,6 +17,7 @@ export const state = (): { car: Car } => ({
     bodyType: 'SEDAN',
     price: 0,
     assets: [],
+    features: [],
     createdAt: '',
     updatedAt: '',
   },
@@ -30,4 +31,13 @@ export const getters: GetterTree<RootState, RootState> = {
 
 export const mutations: MutationTree<RootState> = {
   SET_CAR: (state, car: Car) => (state.car = car),
+}
+
+export const actions: ActionTree<RootState, RootState> = {
+  async fetchCar({ commit }, carId: string) {
+    const { data } = await this.$axios.get<Car>(
+      `${this.app.$config.serverURL}/cars/${carId}`
+    )
+    commit('SET_CAR', data)
+  },
 }

@@ -4,7 +4,7 @@ export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     titleTemplate: '%s - prime-traders',
-    title: 'prime-traders',
+    title: 'Prime Traders',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -71,7 +71,7 @@ export default {
         },
         light: {
           primary: colors.teal.darken3,
-          accent: colors.grey.darken3,
+          accent: colors.lime.accent4,
           secondary: colors.amber.darken3,
           info: colors.teal.lighten1,
           warning: colors.amber.base,
@@ -84,5 +84,9 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-  }
+  },
+
+  publicRuntimeConfig: {
+    serverURL: process.env.SERVER_URL
+  },
 }

@@ -20,20 +20,13 @@
 
       <v-card-text>
         <v-chip-group column>
-          <v-chip color="primary" class="text-caption">
-            {{ car.engineCapacity }} CC
-          </v-chip>
-          <v-chip color="primary" class="text-caption">
-            {{ car.transmission }}
-          </v-chip>
-          <v-chip color="primary" class="text-caption">
-            {{ car.color }}
-          </v-chip>
-          <v-chip color="primary" class="text-caption">
-            {{ car.door }} DOORS
-          </v-chip>
-          <v-chip color="primary" class="text-caption">
-            {{ car.fuelType.join('+') }}
+          <v-chip
+            v-for="chip in summaryChips"
+            :key="chip"
+            color="primary"
+            class="text-caption"
+          >
+            {{ chip }}
           </v-chip>
         </v-chip-group>
       </v-card-text>
@@ -55,6 +48,15 @@ export default Vue.extend({
   computed: {
     primaryImage(): string | undefined {
       return this.car.assets.find((asset) => asset.primary)?.source
+    },
+    summaryChips(): string[] {
+      return [
+        `${this.car.engineCapacity} CC`,
+        `${this.car.transmission}`,
+        `${this.car.color}`,
+        `${this.car.door} DOORS`,
+        `${this.car.fuelType.join('+')}`,
+      ]
     },
   },
   methods: {
