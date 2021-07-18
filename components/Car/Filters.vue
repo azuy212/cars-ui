@@ -137,6 +137,17 @@ export default Vue.extend({
     filters: {
       immediate: true,
       handler() {
+        const { make } = this.$route.query
+        if (make) {
+          this.$set(
+            this.models,
+            'make',
+            make
+              .toString()
+              .split(',')
+              .map((m) => this.filters.make.indexOf(m))
+          )
+        }
         this.models.price = [this.filters.price.min, this.filters.price.max]
         this.models.year = [this.filters.year.min, this.filters.year.max]
         this.models.engineCapacity = [
@@ -174,7 +185,7 @@ export default Vue.extend({
         return acc
       }, {})
 
-      return mappedModel
+      this.$store.dispatch('search/searchCars', mappedModel)
     },
   },
 })

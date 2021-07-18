@@ -17,5 +17,8 @@ export default Vue.extend({
   computed: {
     ...(mapGetters(['cars']) as { cars: () => Car[] }),
   },
+  mounted() {
+    this.$store.dispatch('fetchCars')
+  },
 })
 </script>

@@ -1,6 +1,5 @@
 <template>
   <v-form ref="form" v-model="valid" lazy-validation class="ma-4">
-    <div class="subtitle-2 my-4">Get in touch to reserve this Car</div>
     <v-text-field v-model="name" label="Name" required outlined></v-text-field>
 
     <v-text-field
@@ -19,7 +18,7 @@
     ></v-text-field>
 
     <v-btn :disabled="!valid" color="primary" outlined block @click="validate">
-      Reserve Now
+      Contact Now
     </v-btn>
   </v-form>
 </template>

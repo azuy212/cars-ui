@@ -1,17 +1,17 @@
 <template>
   <v-container>
     <v-row>
-      <v-col lg="4" md="4">
+      <v-col lg="3" md="4">
         <v-card outlined>
           <CarFilters />
         </v-card>
       </v-col>
-      <v-col lg="8" md="8">
+      <v-col lg="9" md="8">
         <v-row>
           <v-col>
             <div class="title">
-              <strong>{{ filteredCars.length }}</strong
-              >&nbsp;Cars match your search criteria
+              <strong>{{ filteredCars.length }}</strong>
+              &nbsp;Cars match your search criteria
             </div>
           </v-col>
         </v-row>
@@ -39,6 +39,11 @@ export default Vue.extend({
     ...(mapGetters('search', ['filteredCars']) as {
       filteredCars: () => Car[]
     }),
+  },
+  mounted() {
+    const { make, model } = this.$route.query
+    this.$store.dispatch('search/fetchFilters')
+    this.$store.dispatch('search/searchCars', { make, model })
   },
 })
 </script>

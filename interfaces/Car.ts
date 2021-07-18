@@ -57,7 +57,13 @@ export interface Car {
 }
 
 export type DistinctFilters = {
-  [key in 'make' | 'transmission' | 'fuelType' | 'color' | 'bodyType']: string[]
+  [key in
+    | 'make'
+    | 'model'
+    | 'transmission'
+    | 'fuelType'
+    | 'color'
+    | 'bodyType']: string[]
 }
 
 export type RangeFilters = {
@@ -66,4 +72,18 @@ export type RangeFilters = {
 
 export type Filters = (DistinctFilters & RangeFilters) & {
   [key: string]: string[] | { min: number; max: number }
+}
+
+export type CarListFilterQuery = Record<keyof Car, string[]>
+
+export interface Page<T> {
+  content: T[]
+  last: boolean
+  totalElements: number
+  totalPages: number
+  size: number
+  number: number
+  sort: string
+  first: boolean
+  numberOfElements: number
 }

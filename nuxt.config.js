@@ -84,5 +84,9 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-  }
+  },
+
+  publicRuntimeConfig: {
+    serverURL: process.env.SERVER_URL
+  },
 }

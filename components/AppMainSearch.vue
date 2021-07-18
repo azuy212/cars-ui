@@ -8,10 +8,17 @@
       </v-row>
       <v-row>
         <v-col cols="12" lg="5" md="5" sm="5">
-          <v-select v-model="select" :items="items" label="Make"> </v-select>
+          <v-select
+            v-model="make"
+            :items="makeItems"
+            label="Make"
+            @change="onMakeSelect"
+          >
+          </v-select>
         </v-col>
         <v-col cols="12" lg="5" md="5" sm="5">
-          <v-select v-model="select" :items="items" label="Model"> </v-select>
+          <v-select v-model="model" :items="modelItems" label="Model">
+          </v-select>
         </v-col>
         <v-col cols="12" lg="2" md="2" sm="2" align-self="center">
           <v-btn
@@ -19,7 +26,9 @@
             :block="$vuetify.breakpoint.smAndDown"
             small
             outlined
-            >Search Car
+            @click="searchCar"
+          >
+            Search Car
           </v-btn>
         </v-col>
       </v-row>
@@ -45,12 +54,37 @@
 import Vue from 'vue'
 export default Vue.extend({
   data: () => ({
-    select: '',
-    items: [],
+    make: '',
+    model: '',
+    makeItems: [],
+    modelItems: [],
   }),
+
+  async mounted() {
+    const { data } = await this.$axios.get(
+      `${this.$config.serverURL}/cars/filters/make`
+    )
+    this.makeItems = data
+  },
+
   methods: {
     handleAdvanceFilterClick() {
       this.$router.push({ name: 'car' })
+    },
+
+    searchCar() {
+      this.$router.push({
+        name: 'car',
+        query: { make: this.make, model: this.model },
+      })
+    },
+
+    async onMakeSelect(make: string) {
+      const { data } = await this.$axios.get(
+        `${this.$config.serverURL}/cars/filters/model`,
+        { params: { make } }
+      )
+      this.modelItems = data
     },
   },
 })

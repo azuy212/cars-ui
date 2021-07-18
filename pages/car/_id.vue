@@ -1,6 +1,6 @@
 <template>
   <v-container fluid class="fill-height">
-    <CarDetail />
+    <CarDetail :car-id="carId" />
   </v-container>
 </template>
 
@@ -8,7 +8,7 @@
 import Vue from 'vue'
 export default Vue.extend({
   layout: 'car',
-  asyncData({ params }) {
+  asyncData({ params }): { carId: string } {
     return { carId: params.id }
   },
 })
