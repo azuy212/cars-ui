@@ -1,17 +1,16 @@
 <template>
   <v-container>
     <v-card flat>
-      <v-row class="d-sm-none d-none d-md-flex">
+      <v-row>
         <v-col sm="6">
           <v-row>
             <v-col>
               <CarDetailImageSlider v-if="car.assets.length > 0" />
             </v-col>
           </v-row>
-          <CarDetailSummary />
           <v-row>
             <v-col>
-              <ContactForm />
+              <CarDetailSummary />
             </v-col>
           </v-row>
         </v-col>
@@ -21,9 +20,14 @@
               <CarDetailInformation />
             </v-col>
           </v-row>
+          <v-row>
+            <v-col>
+              <ContactForm />
+            </v-col>
+          </v-row>
         </v-col>
       </v-row>
-      <v-row class="d-flex d-sm-none d-none d-sm-flex d-md-none">
+      <!-- <v-row class="d-flex d-sm-none d-none d-sm-flex d-md-none">
         <v-col>
           <v-row>
             <v-col><CarDetailImageSlider v-if="car.assets.length > 0" /></v-col>
@@ -40,7 +44,7 @@
             </v-col>
           </v-row>
         </v-col>
-      </v-row>
+      </v-row> -->
     </v-card>
   </v-container>
 </template>

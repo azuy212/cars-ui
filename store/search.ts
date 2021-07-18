@@ -1,8 +1,28 @@
 import { GetterTree, MutationTree } from 'vuex'
-import { Car } from '~/interfaces/Car'
+import { Car, Filters } from '~/interfaces/Car'
 
-export const state = (): { cars: Car[] } => ({
-  cars: [
+export const state = (): { filters: Filters; filteredCars: Car[] } => ({
+  filters: {
+    make: ['AUDI', 'TOYOTA', 'VOLKSWAGEN'],
+    transmission: ['AUTO'],
+    fuelType: ['PETROL'],
+    color: ['GREY', 'RED', 'WHITE'],
+    bodyType: ['STATION_WAGON'],
+    features: ['ABS', 'AIR_BAG', 'AIR_CONDITION', 'MULTIMEDIA'],
+    engineCapacity: {
+      min: 1200,
+      max: 2000,
+    },
+    year: {
+      min: 2009,
+      max: 2014,
+    },
+    price: {
+      min: 1700,
+      max: 6600,
+    },
+  },
+  filteredCars: [
     {
       fuelType: ['PETROL'],
       _id: '60e1e98b13f9661445fa1d46',
@@ -156,9 +176,11 @@ export const state = (): { cars: Car[] } => ({
 export type RootState = ReturnType<typeof state>
 
 export const getters: GetterTree<RootState, RootState> = {
-  cars: (state) => state.cars,
+  filters: (state) => state.filters,
+  filteredCars: (state) => state.filteredCars,
 }
 
 export const mutations: MutationTree<RootState> = {
-  SET_CAR: (state, car: Car[]) => (state.cars = car),
+  SET_FILTERS: (state, filters: Filters) => (state.filters = filters),
+  SET_FILTERED_CARS: (state, cars: Car[]) => (state.filteredCars = cars),
 }

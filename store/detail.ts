@@ -17,6 +17,7 @@ export const state = (): { car: Car } => ({
     bodyType: 'SEDAN',
     price: 0,
     assets: [],
+    features: [],
     createdAt: '',
     updatedAt: '',
   },

@@ -21,41 +21,34 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col sm="2" md="3" lg="2">
+        <v-col v-for="item in summary" :key="item.text" sm="6" md="6" lg="4">
           <v-btn depressed text color="primary">
-            <v-icon class="mr-2">mdi-calendar</v-icon>
-            {{ car.year }}
+            <v-icon left>{{ item.icon }}</v-icon>
+            {{ item.text }}
           </v-btn>
         </v-col>
-        <v-col sm="2" md="3" lg="2">
-          <v-btn depressed text color="primary">
-            <v-icon class="mr-2">mdi-engine</v-icon>
-            {{ car.engineCapacity }} CC
-          </v-btn>
-        </v-col>
-        <v-col sm="2" md="3" lg="2">
-          <v-btn depressed text color="primary">
-            <v-icon class="mr-2">mdi-car-door</v-icon>
-            {{ car.door }} Door
-          </v-btn>
-        </v-col>
-        <v-col sm="2" md="3" lg="2">
-          <v-btn depressed text color="primary">
-            <v-icon class="mr-2">mdi-gas-station</v-icon>
-            {{ car.fuelType[0] }}
-          </v-btn>
-        </v-col>
-        <v-col sm="2" md="3" lg="2">
-          <v-btn depressed text color="primary">
-            <v-icon class="mr-2">mdi-car-shift-pattern</v-icon>
-            {{ car.transmission }}
-          </v-btn>
-        </v-col>
-        <v-col sm="2" md="3" lg="2">
-          <v-btn depressed text color="primary">
-            <v-icon class="mr-2">mdi-palette</v-icon>
-            {{ car.color }}
-          </v-btn>
+      </v-row>
+      <v-row>
+        <v-col>
+          <v-row>
+            <v-col>
+              <div class="title">Features</div>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col
+              v-for="feature in car.features"
+              :key="feature"
+              sm="6"
+              md="6"
+              lg="6"
+            >
+              <v-btn depressed text class="caption" :ripple="false">
+                <v-icon left small>mdi-star</v-icon>
+                {{ feature | casing }}
+              </v-btn>
+            </v-col>
+          </v-row>
         </v-col>
       </v-row>
     </v-col>
@@ -70,6 +63,19 @@ import { Car } from '@/interfaces/Car'
 export default Vue.extend({
   computed: {
     ...(mapGetters('detail', ['car']) as { car: () => Car }),
+    summary(): Array<{ icon: string; text: string | number }> {
+      return [
+        { icon: 'mdi-calendar', text: this.car.year },
+        { icon: 'mdi-engine', text: `${this.car.engineCapacity} CC` },
+        { icon: 'mdi-car-door', text: `${this.car.door} Doors` },
+        { icon: 'mdi-car-shift-pattern', text: this.car.transmission },
+        { icon: 'mdi-palette', text: this.car.color },
+        ...this.car.fuelType.map((fuelType) => ({
+          icon: 'mdi-gas-station',
+          text: fuelType,
+        })),
+      ]
+    },
   },
 })
 </script>

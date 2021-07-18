@@ -8,3 +8,7 @@ Vue.filter('currency', (val: number) =>
     minimumFractionDigits: 0,
   }).format(val)
 )
+
+Vue.filter('casing', (val?: string) => {
+  return val?.replace(/_/g, ' ')
+})

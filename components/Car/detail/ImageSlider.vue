@@ -1,5 +1,5 @@
 <template>
-  <v-carousel cycle height="400" hide-delimiter-background show-arrows-on-hover>
+  <v-carousel cycle height="400" hide-delimiter-background show-arrows-on-hover class="mt-4">
     <v-carousel-item v-for="(car, i) in car.assets" :key="i" :src="car.source">
     </v-carousel-item>
   </v-carousel>

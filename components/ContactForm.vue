@@ -1,5 +1,5 @@
 <template>
-  <v-form ref="form" v-model="valid" lazy-validation>
+  <v-form ref="form" v-model="valid" lazy-validation class="ma-4">
     <div class="subtitle-2 my-4">Get in touch to reserve this Car</div>
     <v-text-field v-model="name" label="Name" required outlined></v-text-field>
 
