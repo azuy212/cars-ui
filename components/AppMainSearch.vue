@@ -61,10 +61,12 @@ export default Vue.extend({
   }),
 
   async mounted() {
-    const { data } = await this.$axios.get(
-      `${this.$config.serverURL}/cars/filters/make`
-    )
-    this.makeItems = data
+    try {
+      const { data } = await this.$axios.get(
+        `${this.$config.serverURL}/cars/filters/make`
+      )
+      this.makeItems = data
+    } catch (error) {}
   },
 
   methods: {

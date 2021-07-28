@@ -1,8 +1,10 @@
 <template>
   <v-app-bar color="primary" app dark>
-    <v-toolbar-title style="cursor: pointer" @click="$router.push('/')">
-      {{ appTitle }}
-    </v-toolbar-title>
+    <nuxt-link :to="appTitlePath">
+      <v-toolbar-title class="white--text">
+        {{ appTitle }}
+      </v-toolbar-title>
+    </nuxt-link>
     <v-spacer></v-spacer>
     <v-btn
       v-for="item in menuItems"
@@ -20,20 +22,28 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
+
+export interface MenuItem {
+  title: string
+  path: string
+  icon: string
+}
+
 export default Vue.extend({
-  data() {
-    return {
-      appTitle: 'Prime Traders',
-      sidebar: false,
-      menuItems: [
-        { title: 'Home', path: '/', icon: 'mdi-home-outline' },
-        { title: 'Search', path: '/car', icon: 'mdi-magnify' },
-        { title: 'How To Buy', path: '/buy', icon: 'mdi-cart-arrow-down' },
-        { title: 'About Us', path: '/about', icon: 'mdi-information-outline' },
-        { title: 'Contact Us', path: '/contact', icon: 'mdi-face-agent' },
-      ],
-    }
+  props: {
+    appTitle: {
+      type: String,
+      default: 'Prime Traders',
+    },
+    appTitlePath: {
+      type: String,
+      default: '/',
+    },
+    menuItems: {
+      type: Array as PropType<Array<MenuItem>>,
+      default: () => [],
+    },
   },
 })
 </script>
