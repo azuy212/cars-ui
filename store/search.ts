@@ -41,20 +41,15 @@ export const mutations: MutationTree<RootState> = {
 
 export const actions: ActionTree<RootState, RootState> = {
   async fetchFilters({ commit }) {
-    const { data } = await this.$axios.get<Filters>(
-      `${this.app.$config.serverURL}/cars/filters`
-    )
-    commit('SET_FILTERS', data)
+    const filters = await this.$axios.$get<Filters>('/cars/filters')
+    commit('SET_FILTERS', filters)
   },
 
   async searchCars({ commit }, filters: CarListFilterQuery) {
-    const { data } = await this.$axios.get<Page<Car>>(
-      `${this.app.$config.serverURL}/cars`,
-      {
-        params: filters,
-        paramsSerializer: (p: any) => qs.stringify(p, { arrayFormat: 'comma' }),
-      }
-    )
-    commit('SET_FILTERED_CARS', data.content)
+    const { content } = await this.$axios.$get<Page<Car>>('/cars', {
+      params: filters,
+      paramsSerializer: (p: any) => qs.stringify(p, { arrayFormat: 'comma' }),
+    })
+    commit('SET_FILTERED_CARS', content)
   },
 }

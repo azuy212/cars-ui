@@ -18,13 +18,10 @@ export const mutations: MutationTree<RootState> = {
 export const actions: ActionTree<RootState, RootState> = {
   async fetchCars({ commit, state }) {
     if (state.cars.length === 0) {
-      const { data } = await this.$axios.get<Page<Car>>(
-        `${this.app.$config.serverURL}/cars`,
-        {
-          params: { page: 0, size: 10 },
-        }
-      )
-      commit('SET_CARS', data.content)
+      const { content } = await this.$axios.$get<Page<Car>>('/cars', {
+        params: { page: 0, size: 10 },
+      })
+      commit('SET_CARS', content)
     }
   },
 }

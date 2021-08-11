@@ -13,7 +13,11 @@
           <v-form @submit.prevent>
             <v-card-text>
               <v-text-field v-model="username" label="Username"></v-text-field>
-              <v-text-field v-model="password" label="Password" type="password"></v-text-field>
+              <v-text-field
+                v-model="password"
+                label="Password"
+                type="password"
+              ></v-text-field>
               <v-checkbox v-model="remember" label="Remember me"></v-checkbox>
             </v-card-text>
             <v-card-actions>
@@ -28,12 +32,16 @@
             </v-col>
           </v-footer>
         </v-container>
+        <v-snackbar v-model="snackbar" color="error" timeout="2000">
+          {{ errorText }}
+        </v-snackbar>
       </v-card>
     </v-main>
   </v-app>
 </template>
 
 <script lang="ts">
+/* eslint-disable camelcase */
 import Vue from 'vue'
 export default Vue.extend({
   data() {
@@ -42,15 +50,24 @@ export default Vue.extend({
       username: '',
       password: '',
       remember: false,
+      snackbar: false,
+      errorText: 'Invalid Username or Password',
     }
   },
   methods: {
-    login() {
-      console.log({
-        username: this.username,
-        password: this.password,
-        remember: this.remember,
-      })
+    async login() {
+      try {
+        const { access_token } = await this.$axios.$post<{
+          access_token: string
+        }>('/auth/login', {
+          username: this.username,
+          password: this.password,
+        })
+        this.$axios.defaults.headers.common.Authorization = `Bearer ${access_token}`
+        this.$router.push('/admin')
+      } catch (error) {
+        this.snackbar = true
+      }
     },
   },
 })

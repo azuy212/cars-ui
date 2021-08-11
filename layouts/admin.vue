@@ -18,7 +18,8 @@ export default Vue.extend({
     return {
       appTitle: 'Prime Traders - Admin Panel',
       menuItems: [
-        { title: 'Cars', path: '/admin', icon: 'mdi-car' },
+        { title: 'Home', path: '/admin', icon: 'mdi-home' },
+        { title: 'Cars', path: '/admin/cars', icon: 'mdi-car' },
         {
           title: 'How To Buy',
           path: '/admin/buy',
