@@ -11,21 +11,21 @@
       <v-toolbar flat>
         <v-toolbar-title>My Cars</v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-btn color="primary">Add new Car</v-btn>
+        <v-btn color="primary" nuxt to="/admin/cars/create">Add new Car</v-btn>
       </v-toolbar>
     </template>
     <template v-slot:item.thumbnail="{ item }">
       <v-img
         :src="item.assets.find((a) => a.primary).source"
-        aspect-ratio="1.5"
+        aspect-ratio="1"
         contain
       ></v-img>
     </template>
     <template v-slot:item.title="{ item }">
       <div>{{ item.make }} {{ item.model }} ({{ item.year }})</div>
     </template>
-    <template v-slot:item.edit>
-      <v-btn depressed text>
+    <template v-slot:item.edit="{ item }">
+      <v-btn depressed text nuxt :to="'/admin/cars/' + item._id">
         <v-icon left>mdi-pencil</v-icon>
         Edit
       </v-btn>
@@ -51,18 +51,22 @@ export default Vue.extend({
       {
         text: '',
         value: 'thumbnail',
+        sortable: false,
       },
       {
         text: '',
         value: 'title',
+        sortable: false,
       },
       {
         text: '',
         value: 'edit',
+        sortable: false,
       },
       {
         text: '',
         value: 'delete',
+        sortable: false,
       },
     ],
     cars: [] as Array<Car>,
