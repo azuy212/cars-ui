@@ -1,11 +1,11 @@
 <template>
   <v-data-table
+    class="elevation-1"
+    :loading="loading"
     :headers="headers"
     :items="cars"
     :options.sync="options"
     :server-items-length="totalCars"
-    :loading="loading"
-    class="elevation-1"
   >
     <template v-slot:top>
       <v-toolbar flat>
@@ -14,23 +14,24 @@
         <v-btn color="primary" nuxt to="/admin/cars/create">Add new Car</v-btn>
       </v-toolbar>
     </template>
-    <template v-slot:item.thumbnail="{ item }">
+    <template v-slot:[`item.thumbnail`]="{ item }">
       <v-img
+        v-if="item.assets.find((a) => a.primary)"
         :src="item.assets.find((a) => a.primary).source"
         aspect-ratio="1"
         contain
       ></v-img>
     </template>
-    <template v-slot:item.title="{ item }">
+    <template v-slot:[`item.title`]="{ item }">
       <div>{{ item.make }} {{ item.model }} ({{ item.year }})</div>
     </template>
-    <template v-slot:item.edit="{ item }">
+    <template v-slot:[`item.edit`]="{ item }">
       <v-btn depressed text nuxt :to="'/admin/cars/' + item._id">
         <v-icon left>mdi-pencil</v-icon>
         Edit
       </v-btn>
     </template>
-    <template v-slot:item.delete>
+    <template v-slot:[`item.delete`]>
       <v-btn depressed text color="error">
         <v-icon left>mdi-delete</v-icon>
         Delete

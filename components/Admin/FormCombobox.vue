@@ -6,6 +6,8 @@
     :label="label"
     :disabled="disabled"
     hide-selected
+    :success="success"
+    :error-messages="errorMessages"
     shaped
     outlined
     required
@@ -31,6 +33,14 @@ import Vue, { PropType } from 'vue'
 
 export default Vue.extend({
   props: {
+    success: {
+      type: Boolean,
+      default: false,
+    },
+    errorMessages: {
+      type: Array,
+      default: () => [],
+    },
     value: {
       type: String,
       default: '',
