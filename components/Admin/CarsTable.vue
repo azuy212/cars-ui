@@ -31,8 +31,8 @@
         Edit
       </v-btn>
     </template>
-    <template v-slot:[`item.delete`]>
-      <v-btn depressed text color="error">
+    <template v-slot:[`item.delete`]="{ item }">
+      <v-btn depressed text color="error" @click="removeCar(item._id)">
         <v-icon left>mdi-delete</v-icon>
         Delete
       </v-btn>
@@ -95,6 +95,14 @@ export default Vue.extend({
         .finally(() => (this.loading = false))
       this.cars = content
       this.totalCars = totalElements
+    },
+    async removeCar(id: string) {
+      this.loading = true
+      const deletedCar = await this.$axios
+        .$delete<Car>(`/cars/${id}`)
+        .finally(() => (this.loading = false))
+      this.cars = this.cars.filter((item) => item._id !== deletedCar._id)
+      this.totalCars = this.totalCars - 1
     },
   },
 })
