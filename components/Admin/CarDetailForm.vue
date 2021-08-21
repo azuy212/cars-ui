@@ -122,6 +122,7 @@
                   :items="fuelTypeItems"
                   :success="valid"
                   :error-messages="errors"
+                  multiple
                 />
               </validation-provider>
             </v-col>
@@ -241,10 +242,11 @@
               >
                 <AdminFormCombobox
                   v-model="features"
-                  label="Feature Type"
+                  label="Feature"
                   :items="featureItems"
                   :success="valid"
                   :error-messages="errors"
+                  multiple
                 />
               </validation-provider>
             </v-col>
@@ -261,6 +263,9 @@
           </v-btn>
         </v-card-actions>
       </v-card>
+      <v-snackbar v-model="snackbar" color="error" timeout="2000">
+        {{ errorText }}
+      </v-snackbar>
     </v-form>
   </ValidationObserver>
 </template>
@@ -268,18 +273,20 @@
 <script lang="ts">
 import Vue from 'vue'
 import { ValidationObserver, ValidationProvider } from 'vee-validate'
-import { Car } from '~/interfaces/Car'
+import { Car, FUEL_TYPE } from '~/interfaces/Car'
 export default Vue.extend({
   components: {
     ValidationObserver,
     ValidationProvider,
   },
   data: () => ({
+    snackbar: false,
+    errorText: '',
     make: '',
     model: '',
     year: null as unknown,
-    features: '',
-    fuelType: '',
+    features: [] as Array<string>,
+    fuelType: [] as Array<FUEL_TYPE>,
     price: null as unknown,
     chassisNo: '',
     transmission: '',
@@ -313,7 +320,7 @@ export default Vue.extend({
       'CNG',
       'LPG',
       'ELECTRIC',
-    ] as Array<string>,
+    ] as Array<FUEL_TYPE>,
     bodyTypeItems: [
       'COMPACT_SEDAN',
       'COMPACT_SUV',
@@ -345,34 +352,50 @@ export default Vue.extend({
     },
   },
 
-  async mounted() {
+  mounted() {
     try {
-      this.makeItems = await this.$axios.$get<string[]>('/cars/filters/make')
+      this.populateFilterItems()
       if (this.$route.params.id !== 'create') {
-        const car = await this.$axios.$get<Car>(
-          `/cars/${this.$route.params.id}`
-        )
-
-        this.make = car.make
-        this.model = car.model
-        this.year = car.year
-        this.door = car.door
-        this.price = car.price
-        this.features = car.features.toString()
-        this.fuelType = car.fuelType.toString()
-        this.engineCapacity = car.engineCapacity
-        this.steeringPosition = car.steeringPosition
-        this.color = car.color
-        this.bodyType = car.bodyType
-        this.chassisNo = car.chassisNo
-        this.transmission = car.transmission
-        this.registrationMonth = car.registrationMonth
+        this.preSelectEditform()
       }
     } catch (error) {}
   },
 
   methods: {
-    submit() {
+    async preSelectEditform() {
+      const car = await this.$axios.$get<Car>(`/cars/${this.$route.params.id}`)
+
+      this.make = car.make
+      this.model = car.model
+      this.year = car.year
+      this.door = car.door
+      this.price = car.price
+      this.features = car.features
+      this.fuelType = car.fuelType
+      this.engineCapacity = car.engineCapacity
+      this.steeringPosition = car.steeringPosition
+      this.color = car.color
+      this.bodyType = car.bodyType
+      this.chassisNo = car.chassisNo
+      this.transmission = car.transmission
+      this.registrationMonth = car.registrationMonth
+    },
+
+    async populateFilterItems() {
+      const filters = ['make', 'model', 'features', 'color']
+      const [makeItems, modelItems, featuresItems, colorItems] =
+        await Promise.all(
+          filters.map((filter) =>
+            this.$axios.$get<string[]>(`/cars/filters/${filter}`)
+          )
+        )
+      this.makeItems = makeItems
+      this.modelItems = modelItems
+      this.featureItems = featuresItems
+      this.colorItems = colorItems
+    },
+
+    async submit() {
       const carObj = {
         make: this.make,
         model: this.model,
@@ -389,10 +412,19 @@ export default Vue.extend({
         door: Number(this.door),
         steeringPosition: this.steeringPosition,
       }
-      if (this.$route.params.id === 'create') {
-        this.$axios.$post<Car>('/cars', carObj)
-      } else {
-        this.$axios.$patch<Car>(`/cars/${this.$route.params.id}`, carObj)
+      try {
+        if (this.$route.params.id === 'create') {
+          await this.$axios.$post<Car>('/cars', carObj)
+        } else {
+          await this.$axios.$patch<Car>(
+            `/cars/${this.$route.params.id}`,
+            carObj
+          )
+        }
+        this.$router.push('/admin/cars')
+      } catch (error) {
+        this.errorText = error
+        this.snackbar = true
       }
     },
   },

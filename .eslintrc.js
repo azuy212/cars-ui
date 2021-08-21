@@ -15,5 +15,6 @@ module.exports = {
     'vue/v-slot-style': ['off'],
     'vue/no-v-html': ['off'],
     'vue/valid-v-slot': ['error', { allowModifiers: true }],
+    '@typescript-eslint/no-unused-vars': ['warn', { varsIgnorePattern: '^_' }],
   },
 }

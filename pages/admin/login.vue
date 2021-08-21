@@ -64,7 +64,7 @@ export default Vue.extend({
           password: this.password,
         })
         this.$axios.defaults.headers.common.Authorization = `Bearer ${access_token}`
-        this.$router.push('/admin')
+        this.$router.push('/admin/cars')
       } catch (error) {
         this.snackbar = true
       }

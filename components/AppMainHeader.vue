@@ -1,5 +1,5 @@
 <template>
-  <div class="pt-16 pb-16 bg-forest-night">
+  <div class="pt-16 pb-16 primary">
     <div class="px-4 pb-10 text-center">
       <div class="flex justify-center">
         <NuxtLogo />

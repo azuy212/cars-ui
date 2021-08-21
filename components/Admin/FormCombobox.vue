@@ -1,16 +1,12 @@
 <template>
   <v-combobox
     v-model="syncedValue"
-    :items="items"
     :search-input.sync="search"
-    :label="label"
-    :disabled="disabled"
-    hide-selected
-    :success="success"
     :error-messages="errorMessages"
+    :multiple="multiple"
+    v-bind="attributes"
     shaped
     outlined
-    required
   >
     <template v-slot:no-data>
       <v-list-item>
@@ -33,29 +29,17 @@ import Vue, { PropType } from 'vue'
 
 export default Vue.extend({
   props: {
-    success: {
-      type: Boolean,
-      default: false,
-    },
     errorMessages: {
       type: Array,
       default: () => [],
     },
-    value: {
-      type: String,
-      default: '',
-    },
-    label: {
-      type: String,
-      default: '',
-    },
-    items: {
-      type: Array as PropType<string[]>,
-      default: () => [],
-    },
-    disabled: {
+    multiple: {
       type: Boolean,
       default: false,
+    },
+    value: {
+      type: [String, Array] as PropType<Array<string>>,
+      default: '',
     },
   },
 
@@ -66,20 +50,18 @@ export default Vue.extend({
   },
 
   computed: {
+    attributes(): Record<string, string> {
+      const { search: _, ...rest } = this.$attrs
+      return rest
+    },
+
     syncedValue: {
-      get(): string {
+      get(): string | string[] {
         return this.value
       },
-      set(value: string) {
+      set(value: string | string[]) {
         this.$emit('input', value)
       },
-    },
-  },
-
-  watch: {
-    syncedValue(newVal: string, oldVal: string) {
-      if (newVal === oldVal) return
-      this.syncedValue = this.syncedValue.toUpperCase()
     },
   },
 })

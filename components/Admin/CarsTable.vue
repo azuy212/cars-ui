@@ -13,6 +13,28 @@
         <v-spacer></v-spacer>
         <v-btn color="primary" nuxt to="/admin/cars/create">Add new Car</v-btn>
       </v-toolbar>
+      <v-dialog v-model="dialogDelete" max-width="500px">
+        <v-card>
+          <v-card-title>
+            {{ editedItem.make }} {{ editedItem.model }} ({{ editedItem.year }})
+          </v-card-title>
+          <v-card-subtitle>
+            Are you sure you want to delete this car ?
+          </v-card-subtitle>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" text @click="closeDelete">
+              <v-icon left>mdi-cancel</v-icon>
+              No
+            </v-btn>
+            <v-btn color="error" text @click="deleteItemConfirm">
+              <v-icon left>mdi-delete</v-icon>
+              Yes
+            </v-btn>
+            <v-spacer></v-spacer>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </template>
     <template v-slot:[`item.thumbnail`]="{ item }">
       <v-img
@@ -32,7 +54,7 @@
       </v-btn>
     </template>
     <template v-slot:[`item.delete`]="{ item }">
-      <v-btn depressed text color="error" @click="removeCar(item._id)">
+      <v-btn depressed text color="error" @click="deleteItem(item)">
         <v-icon left>mdi-delete</v-icon>
         Delete
       </v-btn>
@@ -74,6 +96,7 @@ export default Vue.extend({
     options: {},
     totalCars: 0,
     loading: false,
+    editedItem: {} as Car,
   }),
 
   watch: {
@@ -96,6 +119,7 @@ export default Vue.extend({
       this.cars = content
       this.totalCars = totalElements
     },
+
     async removeCar(id: string) {
       this.loading = true
       const deletedCar = await this.$axios
@@ -103,6 +127,23 @@ export default Vue.extend({
         .finally(() => (this.loading = false))
       this.cars = this.cars.filter((item) => item._id !== deletedCar._id)
       this.totalCars = this.totalCars - 1
+    },
+
+    deleteItem(item: Car) {
+      this.editedItem = Object.assign({}, item)
+      this.dialogDelete = true
+    },
+
+    async deleteItemConfirm() {
+      await this.removeCar(this.editedItem._id!)
+      this.closeDelete()
+    },
+
+    closeDelete() {
+      this.dialogDelete = false
+      this.$nextTick(() => {
+        this.editedItem = {} as Car
+      })
     },
   },
 })
