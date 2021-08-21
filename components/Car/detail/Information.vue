@@ -6,7 +6,7 @@
         <dl class="list list--table">
           <template v-for="(item, i) in items">
             <div :key="i" class="list__row">
-              <dt class="list__label">{{ item.label }}</dt>
+              <dt class="list__label primary--text">{{ item.label }}</dt>
               <dd class="list__value">{{ item.value }}</dd>
             </div>
           </template>
@@ -63,7 +63,6 @@ export default Vue.extend({
 
   .list__label {
     white-space: nowrap;
-    color: #00695c;
   }
 }
 

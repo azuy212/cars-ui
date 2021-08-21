@@ -52,8 +52,8 @@ export interface Car {
   price: number
   assets: Asset[]
   features: string[]
-  createdAt: string
-  updatedAt: string
+  createdAt?: string
+  updatedAt?: string
 }
 
 export type DistinctFilters = {

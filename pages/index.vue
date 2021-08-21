@@ -14,6 +14,7 @@ import { mapGetters } from 'vuex'
 import { Car } from '@/interfaces/Car'
 
 export default Vue.extend({
+  layout: 'car',
   computed: {
     ...(mapGetters(['cars']) as { cars: () => Car[] }),
   },

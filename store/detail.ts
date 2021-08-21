@@ -35,9 +35,7 @@ export const mutations: MutationTree<RootState> = {
 
 export const actions: ActionTree<RootState, RootState> = {
   async fetchCar({ commit }, carId: string) {
-    const { data } = await this.$axios.get<Car>(
-      `${this.app.$config.serverURL}/cars/${carId}`
-    )
+    const data = await this.$axios.$get<Car>(`/cars/${carId}`)
     commit('SET_CAR', data)
   },
 }

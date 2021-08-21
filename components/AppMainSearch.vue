@@ -56,15 +56,14 @@ export default Vue.extend({
   data: () => ({
     make: '',
     model: '',
-    makeItems: [],
-    modelItems: [],
+    makeItems: [] as Array<string>,
+    modelItems: [] as Array<string>,
   }),
 
   async mounted() {
-    const { data } = await this.$axios.get(
-      `${this.$config.serverURL}/cars/filters/make`
-    )
-    this.makeItems = data
+    try {
+      this.makeItems = await this.$axios.$get<string[]>('/cars/filters/make')
+    } catch (error) {}
   },
 
   methods: {
@@ -80,11 +79,12 @@ export default Vue.extend({
     },
 
     async onMakeSelect(make: string) {
-      const { data } = await this.$axios.get(
-        `${this.$config.serverURL}/cars/filters/model`,
-        { params: { make } }
+      this.modelItems = await this.$axios.$get<string[]>(
+        '/cars/filters/model',
+        {
+          params: { make },
+        }
       )
-      this.modelItems = data
     },
   },
 })
