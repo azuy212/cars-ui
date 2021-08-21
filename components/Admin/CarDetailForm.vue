@@ -1,6 +1,6 @@
 <template>
-  <ValidationObserver ref="obs" v-slot="{ invalid, validated, handleSubmit }">
-    <v-form ref="form" v-model="validForm" lazy-validation>
+  <ValidationObserver ref="obs" v-slot="{ invalid, handleSubmit }">
+    <v-form ref="form" lazy-validation>
       <v-card>
         <v-card-title>Car Details</v-card-title>
         <v-card-text>
@@ -49,12 +49,8 @@
                   type="number"
                   shaped
                   outlined
-                  counter="4"
                   :success="valid"
                   :error-messages="errors"
-                  :rules="[
-                    (v) => (v && v.length === 4) || 'Year must be valid (YYYY)',
-                  ]"
                 />
               </validation-provider>
             </v-col>
@@ -138,7 +134,7 @@
                 rules="required|digits:1"
               >
                 <v-text-field
-                  v-model="doors"
+                  v-model="door"
                   label="Doors"
                   type="number"
                   shaped
@@ -258,7 +254,7 @@
           <v-btn
             block
             color="primary"
-            :disabled="invalid || !validated"
+            :disabled="invalid"
             @click="handleSubmit(submit)"
           >
             submit
@@ -279,21 +275,20 @@ export default Vue.extend({
     ValidationProvider,
   },
   data: () => ({
-    validForm: false,
     make: '',
     model: '',
-    year: null,
+    year: null as unknown,
     features: '',
     fuelType: '',
-    price: null,
+    price: null as unknown,
     chassisNo: '',
     transmission: '',
     registrationMonth: '',
-    engineCapacity: null,
+    engineCapacity: null as unknown,
     bodyType: '',
     color: '',
-    doors: null,
-    steeringPosition: null,
+    door: 4,
+    steeringPosition: 'LEFT',
     makeItems: [] as Array<string>,
     modelItems: [] as Array<string>,
     featureItems: [] as Array<string>,
@@ -353,6 +348,26 @@ export default Vue.extend({
   async mounted() {
     try {
       this.makeItems = await this.$axios.$get<string[]>('/cars/filters/make')
+      if (this.$route.params.id !== 'create') {
+        const car = await this.$axios.$get<Car>(
+          `/cars/${this.$route.params.id}`
+        )
+
+        this.make = car.make
+        this.model = car.model
+        this.year = car.year
+        this.door = car.door
+        this.price = car.price
+        this.features = car.features.toString()
+        this.fuelType = car.fuelType.toString()
+        this.engineCapacity = car.engineCapacity
+        this.steeringPosition = car.steeringPosition
+        this.color = car.color
+        this.bodyType = car.bodyType
+        this.chassisNo = car.chassisNo
+        this.transmission = car.transmission
+        this.registrationMonth = car.registrationMonth
+      }
     } catch (error) {}
   },
 
@@ -371,13 +386,13 @@ export default Vue.extend({
         engineCapacity: Number(this.engineCapacity),
         bodyType: this.bodyType,
         color: this.color,
-        door: Number(this.doors),
+        door: Number(this.door),
         steeringPosition: this.steeringPosition,
       }
       if (this.$route.params.id === 'create') {
         this.$axios.$post<Car>('/cars', carObj)
       } else {
-        this.$axios.$post<Car>(`/cars/${this.$route.params.id}`, carObj)
+        this.$axios.$patch<Car>(`/cars/${this.$route.params.id}`, carObj)
       }
     },
   },
